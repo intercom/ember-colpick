@@ -31,6 +31,10 @@
     "ember-cli-version-checker": "^2.1.0",
     "webpack": "^5.72.1"
   },
+  "resolutions": {
+    "chokidar": "3.5.3",
+    "sane": "^5.0.1"
+  },
   "devDependencies": {
     "@ember/jquery": "^2.0.0",
     "@ember/legacy-built-in-components": "^0.4.2",
