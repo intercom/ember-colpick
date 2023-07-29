@@ -9,12 +9,12 @@ function onRenderObserver(/*keys..., fn*/) {
   var fn = args.slice(-1)[0];
   var keys = args.slice(0, -1);
 
-  var observerFunction = function() {
+  var observerFunction = function () {
     if (this._state !== 'inDOM') {
       // don't schedule unless inDOM
       return;
     }
-    schedule('render', this, function() {
+    schedule('render', this, function () {
       // don't run unless still inDOM
       if (this._state === 'inDOM') {
         fn.call(this);
@@ -25,10 +25,10 @@ function onRenderObserver(/*keys..., fn*/) {
   return observer.apply(null, keys.concat([observerFunction]));
 }
 
-export default Mixin.create( {
+export default Mixin.create({
   colpickLayout: 'hex',
   colorScheme: 'dark',
-  classNames: [ 'ember-col-pick' ],
+  classNames: ['ember-col-pick'],
   flat: true, // [true/false] render as popup (true) rendering inline (false)
   value: null,
   previewValue: null,
@@ -36,29 +36,34 @@ export default Mixin.create( {
 
   _colpick: undefined,
 
-  configDidChange: onRenderObserver('colorScheme', 'colpickLayout', 'flat', function(){
-    this._tearDownColpick();
-    this.rerender();
-  }),
+  configDidChange: onRenderObserver(
+    'colorScheme',
+    'colpickLayout',
+    'flat',
+    function () {
+      this._tearDownColpick();
+      this.rerender();
+    }
+  ),
 
-  valueDidChange: onRenderObserver('value', function() {
+  valueDidChange: onRenderObserver('value', function () {
     var value = this.get('value');
     if (this._colpick && value) {
       this._colpick.colpickSetColor(value);
     }
   }),
 
-  _setupColpick: function() {
+  _setupColpick: function () {
     var layout = this.get('colpickLayout');
     var colorScheme = this.get('colorScheme');
 
     if (layout && colorScheme) {
-      var colpick = this._colpick = this.$().colpick({
+      var colpick = (this._colpick = $(this.element).colpick({
         layout: layout,
         colorScheme: colorScheme,
         submit: 0,
         flat: this.get('flat'),
-        onChange: bind(this, function(hsb, hex) {
+        onChange: bind(this, function (hsb, hex) {
           if (this.get('useHashtag')) {
             hex = '#' + hex;
           }
@@ -69,13 +74,13 @@ export default Mixin.create( {
             this.set('value', hex);
           }
         }),
-        onHide: bind(this, function(){
+        onHide: bind(this, function () {
           // eslint-disable-next-line ember/closure-actions
           this.sendAction('onHide');
-        })
-      });
+        }),
+      }));
 
-      colpick.find('input[type=text]').keyup(function() {
+      colpick.find('input[type=text]').keyup(function () {
         var hexInputVal = this.value;
         if (hexInputVal.length === 6) {
           colpick.colpickSetColor(hexInputVal);
@@ -89,15 +94,17 @@ export default Mixin.create( {
     }
   },
 
-  _isValidPreviewValue: function() {
+  _isValidPreviewValue: function () {
     var previewHex = this.get('previewValue');
-    var validityRegex = this.get('useHashtag') ? /^#[a-f0-9]{6}$/i : /^[a-f0-9]{6}$/i;
+    var validityRegex = this.get('useHashtag')
+      ? /^#[a-f0-9]{6}$/i
+      : /^[a-f0-9]{6}$/i;
     return isPresent(previewHex.match(validityRegex));
   },
 
-  popup: function() {
+  popup: function () {
     if (this._state === 'inDOM') {
-      return $('#' + this.$().data('colpickId'));
+      return $('#' + $(this.element).data('colpickId'));
     }
   },
 
@@ -106,7 +113,7 @@ export default Mixin.create( {
     this._setupColpick();
   },
 
-  _tearDownColpick: function() {
+  _tearDownColpick: function () {
     if (this._colpick) {
       if (!this.isDestroying) {
         this._colpick.colpickDestroy();
@@ -118,6 +125,5 @@ export default Mixin.create( {
   willDestroyElement: function () {
     this._tearDownColpick();
     this._super();
-  }
+  },
 });
-

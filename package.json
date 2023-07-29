@@ -1,6 +1,6 @@
 {
   "name": "ember-colpick",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha.0",
   "description": "color picker component for ember using http://colpick.com/",
   "keywords": [
     "ember-addon"
@@ -31,11 +31,15 @@
     "ember-cli-version-checker": "^2.1.0",
     "jquery-colpick": "^3.1.0"
   },
+  "peerDependencies": {
+    "jquery": "^3.5.0"
+  },
   "resolutions": {
     "chokidar": "3.5.3",
     "sane": "^5.0.1"
   },
   "devDependencies": {
+    "@ember/jquery": "^1.1.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.6.0",
     "@embroider/test-setup": "^0.48.1",
