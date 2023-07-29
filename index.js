@@ -3,7 +3,7 @@ const path = require('path');
 const VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
-  name: 'ember-colpick',
+  name: require('./package').name,
   init() {
     this._super.init && this._super.init.apply(this, arguments);
     let checker = new VersionChecker(this);
@@ -12,13 +12,13 @@ module.exports = {
   blueprintsPath: function() {
     return path.join(__dirname, 'blueprints');
   },
-  included: function colpick_included() {
+  included: function colpick_included(app) {
     this._super.included.apply(this, arguments);
     if(!process.env.EMBER_CLI_FASTBOOT) {
       var colpickPath = path.join('node_modules', 'jquery-colpick');
 
-      this.app.import(path.join(colpickPath, 'js',  'colpick.js'));
-      this.app.import(path.join(colpickPath, 'css', 'colpick.css'));
+      app.import(path.join(colpickPath, 'js', 'colpick.js'));
+      app.import(path.join(colpickPath, 'css', 'colpick.css'));
     }
   }
 };
