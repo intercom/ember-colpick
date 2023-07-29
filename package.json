@@ -1,6 +1,6 @@
 {
   "name": "ember-colpick",
-  "version": "1.0.1-alpha.0",
+  "version": "1.0.1-intercom.babel.upgrade.0",
   "description": "color picker component for ember using http://colpick.com/",
   "keywords": [
     "ember-addon"
